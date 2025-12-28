@@ -57,13 +57,17 @@ export function WinnerModal({
       />
 
       {/* Modal */}
-      <div className="absolute inset-0 flex top-15 justify-center h-[320px] p-4">
+      <div className="absolute inset-0 flex top-15 justify-center h-[350px] p-4">
         <Card
           className={[
-            'w-full max-w-md p-7 shadow-[0_30px_120px_-60px_rgba(34,211,238,0.35)]',
+            'relative w-full max-w-md overflow-hidden p-7',
+            'shadow-[0_30px_120px_-60px_rgba(34,211,238,0.35)]',
             styles.modal,
           ].join(' ')}
         >
+          <div className={styles.aura} aria-hidden />
+          <div className={styles.rays} aria-hidden />
+          <div className={styles.sheen} aria-hidden />
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-200">
             Victory
           </div>

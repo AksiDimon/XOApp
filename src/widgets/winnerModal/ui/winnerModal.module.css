@@ -8,10 +8,57 @@
   to   { transform: translateY(0) scale(1); opacity: 1; }
 }
 
+@keyframes glowPulse {
+  0% { opacity: 0.35; transform: scale(0.96); filter: blur(18px); }
+  50% { opacity: 0.8; transform: scale(1.05); filter: blur(12px); }
+  100% { opacity: 0.35; transform: scale(0.96); filter: blur(18px); }
+}
+
+@keyframes raysSpin {
+  from { transform: rotate(0deg) scale(1); opacity: 0.4; }
+  50% { transform: rotate(180deg) scale(1.05); opacity: 0.7; }
+  to { transform: rotate(360deg) scale(1); opacity: 0.4; }
+}
+
+@keyframes sheen {
+  from { transform: translateX(-120%); }
+  to { transform: translateX(120%); }
+}
+
 .backdrop {
   animation: fadeIn 160ms ease-out;
 }
 
 .modal {
   animation: scaleIn 180ms ease-out;
+}
+
+
+.aura {
+  position: absolute;
+  inset: -24%;
+  background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.25), rgba(15, 23, 42, 0));
+  filter: blur(20px);
+  animation: glowPulse 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.rays {
+  position: absolute;
+  inset: -40%;
+  background:
+    repeating-conic-gradient(from 0deg, rgba(59, 130, 246, 0.08) 0deg 6deg, rgba(12, 20, 36, 0) 6deg 14deg),
+    repeating-conic-gradient(from 20deg, rgba(236, 72, 153, 0.08) 0deg 6deg, rgba(12, 20, 36, 0) 6deg 14deg);
+  mix-blend-mode: screen;
+  animation: raysSpin 9s linear infinite;
+  pointer-events: none;
+}
+
+.sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.18) 45%, transparent 60%);
+  transform: translateX(-120%);
+  animation: sheen 3.2s ease-in-out infinite;
+  pointer-events: none;
 }

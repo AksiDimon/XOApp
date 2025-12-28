@@ -65,7 +65,13 @@ export function GamePage() {
             <div className="text-xs uppercase tracking-[0.18em] text-slate-400">
               Live match
             </div>
-            <h1 className="text-2xl font-semibold text-white">Game</h1>
+            <h1
+              // className="bg-gradient-to-r from-amber-200 via-yellow-400 to-orange-500 bg-clip-text text-transparent text-4xl font-bold"
+              // className="text-2xl font-semibold text-white"
+              className="bg-gradient-to-r from-[#80ff00f8] to-[#bb08e8] bg-clip-text text-transparent text-4xl font-bold"
+            >
+              Крестики-нолики
+            </h1>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Link

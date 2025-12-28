@@ -1,73 +1,45 @@
-# React + TypeScript + Vite
+# XO Arena
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Неоновый tic-tac-toe с бесконечной доской и историей матчей.
 
-Currently, two official plugins are available:
+## Быстрый старт
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Требуется: Node.js 20+, npm 10+, pnpm/yarn при желании.
+- Установить зависимости: `npm install`
+- Запустить dev-сервер: `npm run dev` и открыть URL из консоли (по умолчанию http://localhost:5173).
+- Сборка prod: `npm run build`
+- Предпросмотр собранного: `npm run preview`
 
-## React Compiler
+## Основные команды
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `npm run dev` — Vite dev сервер с HMR.
+- `npm run build` — типизация + прод-сборка (tsc -b, затем vite build).
+- `npm run preview` — локальный preview собранного билда.
+- `npm run lint` — ESLint.
 
-## Expanding the ESLint configuration
+## Стек
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19 + TypeScript
+- Vite 7
+- Redux Toolkit для состояния матчей и истории
+- react-router-dom для маршрутизации
+- Tailwind 4 (через @tailwindcss/vite) + немного CSS-модулей для анимаций.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Навигация
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- `/login` — ввод ников и старт сессии.
+- `/game` — игровое поле (бесконечная плоскость, панорамирование, линия победы).
+- `/history` — история матчей.
+- `/history/:id` — просмотр сохранённого матча.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Полезно знать
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Победная линия рисуется и анимируется поверх клеток; выигрыш после 5+ подряд.
+- История сохраняется локально (через Redux state; в текущем виде без бэкенда).
+- Tailwind классы дополняются кастомными CSS для эффектов (например, победная линия/модалка).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Разработка
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Настройте редактор на поддержку TypeScript и ESLint.
+- В dev режиме HMR обновит UI без полного перезапуска.
+- Для деплоя используйте артефакты из `dist/`.

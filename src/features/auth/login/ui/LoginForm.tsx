@@ -46,9 +46,6 @@ export function LoginForm() {
       <h1 className="mt-5 text-2xl font-semibold text-white">
         Введите никнеймы
       </h1>
-      {/* <p className="mt-2 text-sm text-slate-300">
-        Введите никнеймы — мы запустим игровую сессию с вашим стилем.
-      </p> */}
 
       <div className="mt-6 space-y-4">
         <label className="block">
