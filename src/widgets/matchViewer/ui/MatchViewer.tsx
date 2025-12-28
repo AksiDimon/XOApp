@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { MatchRecord } from '../../../entities/history/types';
 import { cellKey } from '../../../entities/match/lib/keys';
+import { Button } from '../../../shared/ui/Button/Button';
 
 type Mark = 'X' | 'O';
 
@@ -13,8 +14,20 @@ function buildBoard(moves: MatchRecord['moves']) {
 }
 
 export function MatchViewer({ match }: { match: MatchRecord }) {
+  const totalMoves = match.moves.length;
+  const [cursor, setCursor] = useState(totalMoves);
+
+  useEffect(() => {
+    setCursor(match.moves.length);
+  }, [match.moves.length, match.id]);
+
+  const visibleMoves = useMemo(
+    () => match.moves.slice(0, cursor),
+    [match.moves, cursor]
+  );
+
   const { board, bounds } = useMemo(() => {
-    const b = buildBoard(match.moves);
+    const b = buildBoard(visibleMoves);
 
     if (match.moves.length === 0) {
       return {
@@ -50,7 +63,7 @@ export function MatchViewer({ match }: { match: MatchRecord }) {
         maxY: maxY + pad,
       },
     };
-  }, [match.moves]);
+  }, [match.moves, visibleMoves]);
 
   if (!bounds) {
     return (
@@ -80,9 +93,75 @@ export function MatchViewer({ match }: { match: MatchRecord }) {
     }
   }
 
+  const lastVisible = visibleMoves[visibleMoves.length - 1];
+  const lastVisibleKey = lastVisible ? cellKey(lastVisible.x, lastVisible.y) : null;
+
   return (
     <div className="rounded-3xl border border-white/10 bg-white/5 p-4 text-slate-100 backdrop-blur-xl">
-      <div className="text-xs uppercase tracking-[0.16em] text-slate-400">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="text-xs uppercase tracking-[0.16em] text-slate-400">
+          Итоговое поле (окно): x[{startX}..{startX + cappedW - 1}] y[
+          {startY}..{startY + cappedH - 1}]
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => setCursor(0)}
+            disabled={cursor === 0}
+          >
+            ⏮ Начало
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => setCursor((c) => Math.max(0, c - 1))}
+            disabled={cursor === 0}
+          >
+            ← Шаг
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => setCursor((c) => Math.min(totalMoves, c + 1))}
+            disabled={cursor === totalMoves}
+          >
+            Шаг →
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => setCursor(totalMoves)}
+            disabled={cursor === totalMoves}
+          >
+            Конец ⏭
+          </Button>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-sm text-slate-300">
+          Ход: <span className="font-semibold text-white">{cursor}</span> /
+          {totalMoves}{' '}
+          {lastVisible
+            ? `(${lastVisible.mark} · ${lastVisible.x},${lastVisible.y})`
+            : '(старт)'}
+        </div>
+
+        <div className="flex-1 sm:max-w-xs">
+          <input
+            type="range"
+            min={0}
+            max={totalMoves}
+            value={cursor}
+            onChange={(e) => setCursor(Number(e.target.value))}
+            className="w-full accent-cyan-400"
+          />
+        </div>
+      </div>
+
+      <div className="mt-4 text-xs uppercase tracking-[0.16em] text-slate-400">
         Итоговое поле (окно): x[{startX}..{startX + cappedW - 1}] y[{startY}..
         {startY + cappedH - 1}]
       </div>
@@ -95,7 +174,12 @@ export function MatchViewer({ match }: { match: MatchRecord }) {
           {cells.map((c) => (
             <div
               key={c.key}
-              className="flex aspect-square items-center justify-center border border-white/10 text-lg font-semibold text-cyan-100"
+              className={[
+                'flex aspect-square items-center justify-center border border-white/10 text-lg font-semibold text-cyan-100',
+                lastVisibleKey === c.key
+                  ? 'bg-cyan-500/20 text-white shadow-[0_0_0_1px_rgba(34,211,238,0.4)]'
+                  : '',
+              ].join(' ')}
             >
               {board[c.key] ?? null}
             </div>
